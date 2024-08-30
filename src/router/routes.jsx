@@ -9,8 +9,18 @@ import Overview from "../dashboard/overview";
 import AddProduct from "../dashboard/products/add-products";
 import Checkout from "../pages/Checkout";
 import UpdateProduct from "../dashboard/products/edit-products";
+import RegisterPage from "../auth/register";
+import LoginPage from "../auth/login";
 
 export const routes = createBrowserRouter([
+  {
+    path: "/sign-up",
+    element: <RegisterPage />,
+  },
+  {
+    path: "/sign-in",
+    element: <LoginPage />,
+  },
   {
     path: "/",
     element: <MainLayout />,

@@ -48,7 +48,6 @@ const AddProduct = () => {
           setMessage("Product Created Faild!");
         }
       })
-
       .catch((error) => console.error("Error fetching products:", error));
   };
 
