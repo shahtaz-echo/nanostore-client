@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
   const [message, setMessage] = useState("");
-  const [username, setName] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleSubmit = () => {
-    const bodyData = { username, email, password };
+  const navigate = useNavigate();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const bodyData = { fullname: name, username: email, email, password };
     fetch(`http://localhost:8000/api/register/`, {
       method: "POST",
       headers: {
@@ -16,6 +18,7 @@ const RegisterPage = () => {
       body: JSON.stringify(bodyData),
     })
       .then((res) => {
+        console.log(res);
         if (res.ok) {
           navigate("/sign-in");
         } else {
@@ -30,6 +33,9 @@ const RegisterPage = () => {
       className="container h-screen flex items-center justify-center"
     >
       <div className="bg-gray-100 max-w-[420px] w-full mx-auto p-6">
+        <Link to="/" className="text-lg text-orange-500">
+          nanostore
+        </Link>
         <h2 className="text-2xl font-semibold">Open a New Account</h2>
         <form className="mt-6 flex flex-col gap-6" onSubmit={handleSubmit}>
           <div>
@@ -39,7 +45,7 @@ const RegisterPage = () => {
             <input
               type="name"
               placeholder="Your Name"
-              value={username}
+              value={name}
               onChange={(e) => setName(e.target.value)}
               className="border border-black/30 py-2 px-4 w-full outline-none"
             />

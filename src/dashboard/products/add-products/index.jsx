@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { BiSolidLeftArrowAlt } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
+import AddCategory from "../category/add-category";
+import { parseCookies } from "../../../utiles/cookies";
 
 const AddProduct = () => {
   const [categories, setCategories] = useState([]);
+  const [addCategoryModal, setAddCategoryModal] = useState(false);
   const [message, setMessage] = useState("");
+
+  const cookies = parseCookies();
+  const accessToken = cookies["access_token"];
 
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/categories/")
       .then((res) => res.json())
       .then((data) => setCategories(data))
       .catch((error) => console.error("Error fetching products:", error));
-  }, []);
+  }, [message]);
 
   // Initialize state for each form field
   const [name, setName] = useState("");
@@ -38,6 +44,7 @@ const AddProduct = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(bodyData),
     })
@@ -49,6 +56,15 @@ const AddProduct = () => {
         }
       })
       .catch((error) => console.error("Error fetching products:", error));
+  };
+
+  const handleCategoryChange = (e) => {
+    const selectedValue = e.target.value;
+    if (selectedValue === "add_new_category") {
+      setAddCategoryModal(true);
+    } else {
+      setCategory(selectedValue);
+    }
   };
 
   return (
@@ -81,18 +97,19 @@ const AddProduct = () => {
             </label>
             <select
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={handleCategoryChange}
               className="border border-black/30 py-2 px-4 w-full outline-none"
             >
+              <option value="" disabled>
+                Select Category
+              </option>
+              <option value="add_new_category">+ Add New Category</option>
               {categories ? (
-                <>
-                  <option value="">Select Category</option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </>
+                categories?.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))
               ) : (
                 <option value="">No Category Found!</option>
               )}
@@ -162,6 +179,9 @@ const AddProduct = () => {
           </button>
         </div>
       </form>
+      {addCategoryModal && (
+        <AddCategory setOpen={setAddCategoryModal} setMessage={setMessage} />
+      )}
     </div>
   );
 };

@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { parseCookies } from "../../utiles/cookies";
 
 const Checkout = () => {
   const {
     state: { product = {} },
   } = useLocation();
+
+  const cookies = parseCookies();
+  const accessToken = cookies["access_token"];
 
   const navigate = useNavigate();
   if (!product?.id) {
@@ -20,16 +24,29 @@ const Checkout = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Creating an object with the form data
     const formData = {
-      name,
-      email,
-      contactNumber,
+      is_paid: false,
+      phone: contactNumber,
       address,
-      product,
+      items: [{ product: product.id, quantity: 1 }],
+      total_price: product.price,
     };
 
-    console.log("Form Data Submitted:", formData);
+    fetch(`http://127.0.0.1:8000/api/orders/`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((res) => {
+        console.log(res);
+        if (res.ok) {
+          setMessage("Order Successful!");
+        }
+      })
+      .catch((error) => console.error("Error:", error));
   };
 
   return (

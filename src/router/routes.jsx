@@ -11,6 +11,9 @@ import Checkout from "../pages/Checkout";
 import UpdateProduct from "../dashboard/products/edit-products";
 import RegisterPage from "../auth/register";
 import LoginPage from "../auth/login";
+import ProductCategory from "../dashboard/products/category";
+import PrivateRoute from "./private-route";
+import OrderList from "../dashboard/orders";
 
 export const routes = createBrowserRouter([
   {
@@ -28,7 +31,14 @@ export const routes = createBrowserRouter([
       { path: "/", element: <Homepage /> },
       { path: "/products", element: <Products /> },
       { path: "/products/:id", element: <ProductDetails /> },
-      { path: "/checkout", element: <Checkout /> },
+      {
+        path: "/checkout",
+        element: (
+          <PrivateRoute>
+            <Checkout />
+          </PrivateRoute>
+        ),
+      },
     ],
   },
   {
@@ -39,8 +49,16 @@ export const routes = createBrowserRouter([
       { path: "/admin/product-list", element: <ProductList /> },
       { path: "/admin/product-list/add-new", element: <AddProduct /> },
       {
+        path: "/admin/product-list/category-list",
+        element: <ProductCategory />,
+      },
+      {
         path: "/admin/product-list/update-product",
         element: <UpdateProduct />,
+      },
+      {
+        path: "/admin/order-list",
+        element: <OrderList />,
       },
     ],
   },

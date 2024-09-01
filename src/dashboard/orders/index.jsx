@@ -1,72 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { BiPlus, BiTrash } from "react-icons/bi";
-import { BsEye, BsPencil } from "react-icons/bs";
-import { MdOutlineCategory } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
 import { parseCookies } from "../../utiles/cookies";
 
-const ProductList = () => {
-  const [products, setProducts] = useState([]);
+const OrderList = () => {
+  const [orders, setOrders] = useState([]);
   const [message, setMessage] = useState("");
-
   const cookies = parseCookies();
   const accessToken = cookies["access_token"];
-
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/products/")
-      .then((res) => res.json())
-      .then((data) => setProducts(data))
-      .catch((error) => console.error("Error fetching products:", error));
-  }, [message]);
-
-  const navigate = useNavigate();
-  const handleSeeProducts = (id, name) => {
-    const slashedName = name.toLowerCase().split(" ").join("-");
-    navigate(`/products/${slashedName}`, { state: { id } });
-  };
-
-  const handleEditProduct = (product) => {
-    console.log(product);
-    navigate(`/admin/product-list/update-product`, { state: { product } });
-  };
-
-  const handleDeleteProduct = (id) => {
-    fetch(`http://127.0.0.1:8000/api/products/${id}/`, {
-      method: "DELETE",
+    fetch("http://127.0.0.1:8000/api/orders/", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     })
-      .then((res) => {
-        if (res.ok) {
-          setMessage("Product Delete!");
-        }
-      })
-      .catch((error) => console.error("Error:", error));
-  };
+      .then((res) => res.json())
+      .then((data) => setOrders(data))
+      .catch((error) => console.error("Error fetching products:", error));
+  }, [message]);
 
+  console.log(orders);
   return (
     <section>
       <div className="">
-        <h2 className="text-3xl font-semibold">Product List</h2>
-        <div className="flex gap-6">
-          <Link
-            to="/admin/product-list/add-new"
-            className="flex mt-4 items-center gap-1.5 text-sm"
-          >
-            <BiPlus />
-            Add New Product
-          </Link>
-          <Link
-            to="/admin/product-list/category-list"
-            className="flex mt-4 items-center gap-1.5 text-sm"
-          >
-            <MdOutlineCategory />
-            Product Categories
-          </Link>
-        </div>
+        <h2 className="text-3xl font-semibold">Order List</h2>
       </div>
-      <div className="mt-10 flex flex-col gap-4">
+      {/* <div className="mt-10 flex flex-col gap-4">
         <hr className=" border-b-none border-t border-t-black/5" />
         <div className="font-semibold flex items-center gap-8">
           <h2 className="flex-1">Product</h2>
@@ -118,9 +75,9 @@ const ProductList = () => {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
     </section>
   );
 };
 
-export default ProductList;
+export default OrderList;

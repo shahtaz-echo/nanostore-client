@@ -21,11 +21,14 @@ const Products = () => {
     console.log(product);
   };
 
-  return (
-    <div className="container py-20">
-      <h2 className="text-4xl font-semibold">Product List</h2>
+  let content;
 
-      <div className="grid grid-cols-4 gap-6 mt-10">
+  if (products?.length === 0) {
+    content = <div className="mt-10 text-black/50">No Product Found</div>;
+  }
+  if (products?.length) {
+    content = (
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-6 mt-10">
         {products?.map((p, i) => (
           <div key={i}>
             <img
@@ -55,6 +58,13 @@ const Products = () => {
           </div>
         ))}
       </div>
+    );
+  }
+
+  return (
+    <div className="container py-20">
+      <h2 className="text-4xl font-semibold">Product List</h2>
+      {content}
     </div>
   );
 };
