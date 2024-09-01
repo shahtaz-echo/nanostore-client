@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Products = () => {
+const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/products/")
+    fetch("http://127.0.0.1:8000/api/products?featured=true")
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((error) => console.error("Error fetching products:", error));
@@ -60,13 +60,12 @@ const Products = () => {
       </div>
     );
   }
-
   return (
-    <div className="container pt-10">
-      <h2 className="text-4xl font-semibold">Product List</h2>
+    <div className="container py-20">
+      <h2 className="text-4xl font-semibold">Featured Products</h2>
       {content}
     </div>
   );
 };
 
-export default Products;
+export default FeaturedProducts;
