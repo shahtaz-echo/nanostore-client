@@ -3,6 +3,7 @@ import { FaXmark } from "react-icons/fa6";
 
 const AddCategory = ({ setOpen, setMessage }) => {
   const [name, setName] = useState("");
+  const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
 
   const handleSubmit = (e) => {
@@ -10,6 +11,7 @@ const AddCategory = ({ setOpen, setMessage }) => {
 
     const bodyData = {
       name,
+      image,
       description,
     };
 
@@ -39,7 +41,7 @@ const AddCategory = ({ setOpen, setMessage }) => {
             <FaXmark />
           </button>
         </div>
-        <form onSubmit={handleSubmit} className="mt-8">
+        <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-5">
           <div>
             <label className="text-black/75 text-sm font-semibold mb-2 block">
               Category Name
@@ -52,8 +54,20 @@ const AddCategory = ({ setOpen, setMessage }) => {
               className="border border-black/30 py-2 px-4 w-full outline-none"
             />
           </div>
+          <div>
+            <label className="text-black/75 text-sm font-semibold mb-2 block">
+              Category Image
+            </label>
+            <input
+              type="text"
+              placeholder="Image Link"
+              value={image}
+              onChange={(e) => setImage(e.target.value)}
+              className="border border-black/30 py-2 px-4 w-full outline-none"
+            />
+          </div>
 
-          <div className="mt-6">
+          <div>
             <label className="text-black/75 text-sm font-semibold mb-2 block">
               Category Description
             </label>
@@ -65,7 +79,7 @@ const AddCategory = ({ setOpen, setMessage }) => {
               className="border border-black/30 py-2 px-4 w-full outline-none"
             />
           </div>
-          <div className="mt-10 flex items-center gap-2 justify-end">
+          <div className="mt-5 flex items-center gap-2 justify-end">
             <button
               onClick={() => setOpen(false)}
               className="text-center py-2 border border-black/30 w-32 font-medium text-black/75 hover:bg-gray-300 transition duration-300"

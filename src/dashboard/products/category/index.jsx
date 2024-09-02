@@ -4,7 +4,8 @@ import { BsPencil } from "react-icons/bs";
 import { BiPlus, BiTrash } from "react-icons/bi";
 import { MdOutlineCategory } from "react-icons/md";
 import { Link } from "react-router-dom";
-const cphImg = "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTExL2pvYjE0MjgtZWxlbWVudC0xMDctdi5qcGc.jpg";
+const cphImg =
+  "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTExL2pvYjE0MjgtZWxlbWVudC0xMDctdi5qcGc.jpg";
 
 const ProductCategory = () => {
   const [categories, setCategories] = useState([]);
@@ -68,11 +69,11 @@ const ProductCategory = () => {
           <div key={i} className="flex items-center gap-8">
             <div className="flex-1 flex items-center gap-3">
               <img
-                src={cphImg}
-                alt={c.name}
+                src={c?.image || cphImg}
+                alt={c?.name}
                 className="h-12 w-12 object-cover"
               />
-              <h2 className="font-semibold">{c.name}</h2>
+              <h2 className="font-semibold">{c?.name}</h2>
             </div>
             <h2 className="w-[120px]">05</h2>
             <h2 className="flex-1">

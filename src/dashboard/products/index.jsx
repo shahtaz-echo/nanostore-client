@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { BiPlus, BiTrash } from "react-icons/bi";
-import { BsEye, BsPencil } from "react-icons/bs";
-import { MdOutlineCategory } from "react-icons/md";
+import { BsPencil } from "react-icons/bs";
+import { MdDone, MdOutlineCategory } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { parseCookies } from "../../utiles/cookies";
+import FeaturedModal from "./componets/featured-modal";
+import { RxCross2 } from "react-icons/rx";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [message, setMessage] = useState("");
+  const [featuredModal, setFeaturedModal] = useState(null);
 
   const cookies = parseCookies();
   const accessToken = cookies["access_token"];
@@ -44,7 +47,7 @@ const ProductList = () => {
       })
       .catch((error) => console.error("Error:", error));
   };
-
+  console.log(products);
   return (
     <section>
       <div className="">
@@ -70,24 +73,34 @@ const ProductList = () => {
         <hr className=" border-b-none border-t border-t-black/5" />
         <div className="font-semibold flex items-center gap-8">
           <h2 className="flex-1">Product</h2>
-          <h2 className="flex-1">Price</h2>
-          <h2 className="flex-1">Stock</h2>
+          <h2 className="w-[120px]">Price</h2>
+          <h2 className="w-[100px]">Stock</h2>
           <div className="flex-1 ">Category</div>
           <div className="w-[210px]">Action</div>
         </div>
         <hr className="mb-2 border-b-none border-t border-t-black/5" />
         {products?.map((p, i) => (
           <div key={i} className="flex items-center gap-8">
-            <div className="flex-1 flex items-center gap-3">
+            <div
+              onClick={() => handleSeeProducts(p.id, p.name)}
+              className="flex-1 flex items-center gap-3 cursor-pointer"
+            >
               <img
                 src={p.img}
                 alt={p.name}
-                className="h-12 w-12 object-cover"
+                className="h-14 w-14 object-cover"
               />
-              <h2 className="font-semibold">{p.name}</h2>
+              <div>
+                <h2 className="font-semibold mb-1.5">{p.name}</h2>
+                {p.featured && (
+                  <span className="text-xs pt-0.5 pb-1 px-2 text-red-500 bg-red-100">
+                    Featured
+                  </span>
+                )}
+              </div>
             </div>
-            <h2 className="flex-1 font-semibold">BDT {p.price}</h2>
-            <h2 className="flex-1">{p.stock}</h2>
+            <h2 className="w-[120px] font-semibold">BDT {p.price}</h2>
+            <h2 className="w-[100px]">{p.stock}</h2>
             <div className="flex-1 ">
               <span className="text-sm py-1 px-2 bg-green-100 text-green-600">
                 {p.category_name}
@@ -95,11 +108,22 @@ const ProductList = () => {
             </div>
             <div className="w-[210px] text-xs flex items-center gap-3">
               <button
-                onClick={() => handleSeeProducts(p.id, p.name)}
+                onClick={() =>
+                  setFeaturedModal({ id: p.id, featured: p.featured })
+                }
                 className="flex items-center gap-1.5 py-1.5 pl-2 pr-2.5 bg-gray-100 hover:bg-green-100 text-black/75 hover:text-green-500 rounded transition-all duration-300"
               >
-                <BsEye />
-                View
+                {p.featured ? (
+                  <>
+                    <RxCross2 />
+                    Remove
+                  </>
+                ) : (
+                  <>
+                    <MdDone />
+                    Featured
+                  </>
+                )}
               </button>
               <button
                 onClick={() => handleEditProduct(p)}
@@ -119,6 +143,13 @@ const ProductList = () => {
           </div>
         ))}
       </div>
+      {featuredModal && (
+        <FeaturedModal
+          data={featuredModal}
+          setOpen={setFeaturedModal}
+          setMessage={setMessage}
+        />
+      )}
     </section>
   );
 };
