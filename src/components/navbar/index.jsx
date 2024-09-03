@@ -34,7 +34,9 @@ const Navbar = () => {
     <div className="fixed top-0 left-0 right-0 bg-white border-b">
       <div className="container flex items-center justify-between py-3">
         <div className="flex items-center gap-3">
-          <Link to="/" className="text-orange-500 text-xl font-semibold">nanostore</Link>
+          <Link to="/" className="text-orange-500 text-xl font-semibold">
+            nanostore
+          </Link>
           <Link to="/admin">Admin</Link>
         </div>
         <div className="flex items-center gap-3">
@@ -43,15 +45,12 @@ const Navbar = () => {
           </Link>
           {!user_id ? (
             <div className="flex gap-2">
-              <Link
-                to="/sign-in"
-                className="px-5 py-2 text-black border border"
-              >
+              <Link to="/sign-in" className="px-5 py-2 text-black border">
                 Login
               </Link>
               <Link
                 to="/sign-up"
-                className="bg-black px-5 py-2 text-white border border"
+                className="bg-black px-5 py-2 text-white border"
               >
                 Create Account
               </Link>
@@ -60,7 +59,7 @@ const Navbar = () => {
             <div>
               <button
                 onClick={handleLogout}
-                className="bg-black px-5 py-2 text-white border border"
+                className="bg-black px-5 py-2 text-white border"
               >
                 Logout
               </button>

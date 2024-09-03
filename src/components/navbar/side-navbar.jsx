@@ -2,6 +2,7 @@ import React from "react";
 import { BsFillGridFill } from "react-icons/bs";
 import { HiArrowLeft } from "react-icons/hi2";
 import { MdOutlineFormatListBulleted } from "react-icons/md";
+import { RxCodesandboxLogo } from "react-icons/rx";
 import { Link } from "react-router-dom";
 
 const SideNavbar = () => {
@@ -35,7 +36,7 @@ const SideNavbar = () => {
           to="/admin/order-list"
           className="flex items-center gap-2 py-3 hover:bg-white/10 px-5 transition duration-300"
         >
-          <MdOutlineFormatListBulleted /> Order List
+          <RxCodesandboxLogo /> Order List
         </Link>
       </div>
     </div>

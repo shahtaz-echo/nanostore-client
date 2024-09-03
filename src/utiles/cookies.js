@@ -1,19 +1,7 @@
-// Function to parse cookies
-// export function parseCookies() {
-//   const cookieString = document.cookie;
-//   const cookies = {};
-
-//   cookieString.split(";").forEach((cookie) => {
-//     const [name, value] = cookie.trim().split("=");
-//     cookies[name] = value;
-//   });
-
-//   return cookies;
-// }
 export function parseCookies() {
-  const cookies = document.cookie.split('; ');
+  const cookies = document.cookie.split("; ");
   return cookies.reduce((acc, cookie) => {
-    const [name, value] = cookie.split('=');
+    const [name, value] = cookie.split("=");
     acc[name] = value;
     return acc;
   }, {});

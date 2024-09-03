@@ -3,15 +3,38 @@ import { useNavigate } from "react-router-dom";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [searchStr, setSearchStr] = useState("");
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/products/")
+    // Fetch categories
+    fetch("http://127.0.0.1:8000/api/categories/")
+      .then((res) => res.json())
+      .then((data) => setCategories(data))
+      .catch((error) => console.error("Error fetching categories:", error));
+  }, []);
+
+  useEffect(() => {
+    // Fetch products with filters applied
+    let query = `http://127.0.0.1:8000/api/products/?`;
+
+    if (selectedCategory && selectedCategory !== "all") {
+      query += `category=${selectedCategory}&`;
+    }
+
+    if (searchStr) {
+      query += `search=${encodeURIComponent(searchStr)}&`;
+    }
+
+    fetch(query)
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((error) => console.error("Error fetching products:", error));
-  }, []);
+  }, [selectedCategory, searchStr]);
 
   const navigate = useNavigate();
+
   const handleSeeProducts = (id, name) => {
     const slashedName = name.toLowerCase().split(" ").join("-");
     navigate(`/products/${slashedName}`, { state: { id } });
@@ -23,13 +46,12 @@ const Products = () => {
 
   let content;
 
-  if (products?.length === 0) {
+  if (products.length === 0) {
     content = <div className="mt-10 text-black/50">No Product Found</div>;
-  }
-  if (products?.length) {
+  } else {
     content = (
       <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-6 mt-10">
-        {products?.map((p, i) => (
+        {products.map((p, i) => (
           <div key={i}>
             <img
               src={p.img}
@@ -61,9 +83,39 @@ const Products = () => {
     );
   }
 
+  console.log(categories);
+
   return (
     <div className="container pt-10">
-      <h2 className="text-4xl font-semibold">Product List</h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-4xl font-semibold">Product List</h2>
+        <div className="flex items-center gap-4">
+          <div>
+            <input
+              className="border py-2 pl-3 min-w-[300px] outline-none"
+              placeholder="Search Products"
+              onChange={(e) => setSearchStr(e.target.value)}
+            />
+          </div>
+          <div>
+            <select
+              onChange={(e) =>
+                setSelectedCategory(
+                  e.target.value === "all" ? null : e.target.value
+                )
+              }
+              className="border p-2 outline-none"
+            >
+              <option value="all">All Products</option>
+              {categories.map((category, index) => (
+                <option key={index} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
       {content}
     </div>
   );
