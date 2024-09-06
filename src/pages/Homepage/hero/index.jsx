@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-const heroImg =
-  "https://images.pexels.com/photos/1983037/pexels-photo-1983037.jpeg";
+// const heroImg =
+//   "https://images.pexels.com/photos/1983037/pexels-photo-1983037.jpeg";
 
+import heroImg from "../../../assets/images/hero-min.jpeg"  
 const Hero = () => {
   return (
     <section id="hero">
