@@ -17,7 +17,11 @@ const OrderList = () => {
         Authorization: `Bearer ${accessToken}`,
       },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.ok) {
+          res.json();
+        }
+      })
       .then((data) => setOrders(data))
       .catch((error) => console.error("Error fetching orders:", error));
   }, [message]);
@@ -43,6 +47,8 @@ const OrderList = () => {
   const [deleteOrderModal, setDeleteOrderModal] = useState(null);
   const [updateOrderModal, setUpdateOrderModal] = useState(null);
 
+  console.log(orders);
+
   return (
     <section>
       <div className="">
@@ -58,81 +64,85 @@ const OrderList = () => {
           <h2 className="flex-1 ">Status</h2>
           <h2 className="w-8"></h2>
         </div>
-        {orders.map((order, index) => (
-          <div
-            key={index}
-            className="flex items-center gap-8 border-b py-3 px-4"
-          >
-            <p className="w-20">
-              #{(order.id + "").length}
-              {order.id}
-            </p>
-            <div className="flex-1 flex flex-col">
-              <span className="font-medium">{order.user.fullname}</span>
-              <span className="text-sm">{order.user.email}</span>
-            </div>
-            <div className="flex-1 flex flex-col">
-              <span className="font-medium">{order.user.address}</span>
-              <span className="text-sm">{order.user.phone}</span>
-            </div>
-            <div className="flex-1 ">
-              {order.items.map((item, index) => (
-                <div key={index} className="flex flex-col">
-                  <span className="text-sm">{item.product_details.name}</span>
-                  <span className="text-xs font-semibold">
-                    Quantity: {item.quantity}
-                  </span>
-                </div>
-              ))}
-            </div>
-            <div className="flex-1 flex flex-col ">
-              <span className="font-medium">BDT {order.total_price}</span>
-              <span className="text-xs bg-red-100 text-red-600 pt-0.5 p-1 w-fit mt-1">
-                {order.is_paid ? "Paid" : "Not Paid"}
-              </span>
-            </div>
-            <h2 className="flex-1 ">
-              <OrderStatus status={order.status} />
-            </h2>
-            <div className="w-8 relative">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedItem(index === selectedItem ? null : index);
-                }}
-                className="w-7 h-7 tr hover:bg-black/5 rounded-full center"
-              >
-                <BsThreeDotsVertical />
-              </button>
-              {selectedItem === index && (
-                <div
-                  ref={menuRef}
-                  className="absolute bg-white z-10 flex flex-col py-1 border right-7 -mt-4 shadow-md"
+        {orders?.length > 0 ? (
+          orders?.map((order, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-8 border-b py-3 px-4"
+            >
+              <p className="w-20">
+                #{(order.id + "").length}
+                {order.id}
+              </p>
+              <div className="flex-1 flex flex-col">
+                <span className="font-medium">{order.user.fullname}</span>
+                <span className="text-sm">{order.user.email}</span>
+              </div>
+              <div className="flex-1 flex flex-col">
+                <span className="font-medium">{order.user.address}</span>
+                <span className="text-sm">{order.user.phone}</span>
+              </div>
+              <div className="flex-1 ">
+                {order.items.map((item, index) => (
+                  <div key={index} className="flex flex-col">
+                    <span className="text-sm">{item.product_details.name}</span>
+                    <span className="text-xs font-semibold">
+                      Quantity: {item.quantity}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex-1 flex flex-col ">
+                <span className="font-medium">BDT {order.total_price}</span>
+                <span className="text-xs bg-red-100 text-red-600 pt-0.5 p-1 w-fit mt-1">
+                  {order.is_paid ? "Paid" : "Not Paid"}
+                </span>
+              </div>
+              <h2 className="flex-1 ">
+                <OrderStatus status={order.status} />
+              </h2>
+              <div className="w-8 relative">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedItem(index === selectedItem ? null : index);
+                  }}
+                  className="w-7 h-7 tr hover:bg-black/5 rounded-full center"
                 >
-                  <button
-                    onClick={() => {
-                      setUpdateOrderModal(order.id);
-                      setSelectedItem(null);
-                    }}
-                    className="flex items-center gap-1 text-sm py-1 hover:bg-black/5 tr pl-3 pr-4 cursor-pointer"
+                  <BsThreeDotsVertical />
+                </button>
+                {selectedItem === index && (
+                  <div
+                    ref={menuRef}
+                    className="absolute bg-white z-10 flex flex-col py-1 border right-7 -mt-4 shadow-md"
                   >
-                    <BiPencil className="text-black/50" />
-                    Update
-                  </button>
-                  <button
-                    onClick={() => {
-                      setDeleteOrderModal(order.id);
-                      setSelectedItem(null);
-                    }}
-                    className="text-sm flex items-center gap-1 py-1 hover:bg-black/5 tr pl-3 pr-4 cursor-pointer"
-                  >
-                    <BiTrash className="text-black/50" /> Delete
-                  </button>
-                </div>
-              )}
+                    <button
+                      onClick={() => {
+                        setUpdateOrderModal(order.id);
+                        setSelectedItem(null);
+                      }}
+                      className="flex items-center gap-1 text-sm py-1 hover:bg-black/5 tr pl-3 pr-4 cursor-pointer"
+                    >
+                      <BiPencil className="text-black/50" />
+                      Update
+                    </button>
+                    <button
+                      onClick={() => {
+                        setDeleteOrderModal(order.id);
+                        setSelectedItem(null);
+                      }}
+                      className="text-sm flex items-center gap-1 py-1 hover:bg-black/5 tr pl-3 pr-4 cursor-pointer"
+                    >
+                      <BiTrash className="text-black/50" /> Delete
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className="mt-10 text-black/50 text-center">No orders found!</p>
+        )}
       </div>
 
       {deleteOrderModal && (

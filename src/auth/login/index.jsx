@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { setAuthCookies } from "../../utiles/cookies";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
-  const [message, setMessage] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -22,8 +22,9 @@ const LoginPage = () => {
         if (data?.access) {
           setAuthCookies(data.access, data.refresh);
           navigate("/");
+          toast.success("Login successful!");
         } else {
-          setMessage("Login Failed!");
+          toast.error(data?.detail || "Login Failed");
         }
       })
       .catch((error) => console.error("Error fetching products:", error));
@@ -34,8 +35,8 @@ const LoginPage = () => {
       className="container h-screen flex items-center justify-center"
     >
       <div className="bg-gray-100 max-w-[420px] w-full mx-auto p-6">
-      <Link to="/" className="text-lg text-orange-500">
-          nanostore
+        <Link to="/" className="text-lg text-orange-500">
+          darwin
         </Link>
         <h2 className="text-2xl font-semibold">Login</h2>
         <form className="mt-6 flex flex-col gap-6" onSubmit={handleSubmit}>

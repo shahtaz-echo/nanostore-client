@@ -35,7 +35,7 @@ const Navbar = () => {
       <div className="container flex items-center justify-between py-3">
         <div className="flex items-center gap-3">
           <Link to="/" className="text-orange-500 text-xl font-semibold">
-            nanostore
+            darwin
           </Link>
           <Link to="/admin">Admin</Link>
         </div>

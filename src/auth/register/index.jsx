@@ -34,7 +34,7 @@ const RegisterPage = () => {
     >
       <div className="bg-gray-100 max-w-[420px] w-full mx-auto p-6">
         <Link to="/" className="text-lg text-orange-500">
-          nanostore
+          darwin
         </Link>
         <h2 className="text-2xl font-semibold">Open a New Account</h2>
         <form className="mt-6 flex flex-col gap-6" onSubmit={handleSubmit}>
